@@ -30,7 +30,7 @@
 .table-title p {
   font-size: 12px;
   font-weight: 500;
-  margin: 0px;
+  margin:5px 0px;
   color: rgb(100, 100, 100);
 }
 
@@ -129,8 +129,9 @@
 .camera-table th,
 .camera-table td {
   padding: 15px;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid #f0f0f0;
+  color: #626262;
 }
 
 .camera-table th {
@@ -165,6 +166,11 @@
 .action-button:disabled {
   background-color: #e0e0e0;
   cursor: not-allowed;
+}
+
+.checkbox-header{
+  width: 5%;
+  background-color: red;
 }
 
 .checkbox-cell input[type="checkbox"] {

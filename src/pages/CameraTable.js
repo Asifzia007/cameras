@@ -3,19 +3,19 @@ import "./CameraTable.css";
 import logo from "../img/wobot_logo_blue.svg";
 
 const CameraTable = () => {
-  const [cameras, setCameras] = useState([]); 
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState(null); 
+  const [cameras, setCameras] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [camerasPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
-  const [locationFilter, setLocationFilter] = useState("All"); 
+  const [locationFilter, setLocationFilter] = useState("All");
   const [locations, setLocations] = useState([]);
 
-//   console.log(cameras, "camera data");
+  // console.log("camera data" , cameras);
 
-// fetching Cameras data
+  // fetching Cameras data
   useEffect(() => {
     const fetchCameras = async () => {
       try {
@@ -49,13 +49,13 @@ const CameraTable = () => {
     fetchCameras();
   }, []);
 
-//   update Status
+  //   update Status
   const updateStatus = async (cameraId, currentStatus) => {
     const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
     const payload = { id: cameraId, status: newStatus };
-  
+
     console.log("Attempting to update status with payload:", payload);
-  
+
     try {
       const response = await fetch(
         "https://api-app-staging.wobot.ai/app/v1/update/camera/status",
@@ -68,16 +68,16 @@ const CameraTable = () => {
           body: JSON.stringify(payload),
         }
       );
-  
+
       console.log("Response status:", response.status);
-  
+
       if (!response.ok) {
         throw new Error(`Failed to update status: ${response.status}`);
       }
-  
+
       const result = await response.json();
       console.log("API Response:", result);
-  
+
       setCameras((prevCameras) =>
         prevCameras.map((camera) =>
           camera.id === cameraId ? { ...camera, status: newStatus } : camera
@@ -88,9 +88,8 @@ const CameraTable = () => {
       setError(`Error updating status: ${err.message}`);
     }
   };
-  
 
-//   delete Camera
+  //   delete Camera
   const deleteCamera = (id) => {
     const confirmation = window.confirm(
       "Are you sure you want to delete this camera?"
@@ -101,7 +100,6 @@ const CameraTable = () => {
       );
     }
   };
-  
 
   // Filter cameras based on search term, status, and location
   const filteredCameras = cameras.filter((camera) => {
@@ -155,40 +153,37 @@ const CameraTable = () => {
           <i className="search-icon fa fa-search"></i>{" "}
         </div>
       </div>
-    
+
       <div className="dropdown-filter">
+        <div className="dropdown-container">
+          <i className="fas fa-map-marker-alt location-icon"></i>
+          <select
+            className="location-filter"
+            value={locationFilter}
+            onChange={(e) => setLocationFilter(e.target.value)}
+          >
+            <option value="All">Location</option>
+            {locations.map((location, index) => (
+              <option key={index} value={location}>
+                {location}
+              </option>
+            ))}
+          </select>
+        </div>
 
-  <div className="dropdown-container">
-    <i className="fas fa-map-marker-alt location-icon"></i>
-    <select
-      className="location-filter"
-      value={locationFilter}
-      onChange={(e) => setLocationFilter(e.target.value)}
-    >
-      <option value="All">Location</option>
-      {locations.map((location, index) => (
-        <option key={index} value={location}>
-          {location}
-        </option>
-      ))}
-    </select>
-  </div>
-
-
-  <div className="dropdown-container">
-    <i className="fas fa-tasks status-icon"></i>
-    <select
-      className="status-filter"
-      value={statusFilter}
-      onChange={(e) => setStatusFilter(e.target.value)}
-    >
-      <option value="All">Status</option>
-      <option value="Active">Active</option>
-      <option value="Inactive">Inactive</option>
-    </select>
-  </div>
-</div>
-
+        <div className="dropdown-container">
+          <i className="fas fa-tasks status-icon"></i>
+          <select
+            className="status-filter"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="All">Status</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
 
       <div className="table-container">
         <table className="camera-table">
@@ -212,8 +207,15 @@ const CameraTable = () => {
                 </td>
                 <td>{camera.name}</td>
                 <td>
-                  {camera.health.cloud}
-                  {camera.health.device}
+                  <span style={{ marginRight: "10px" }}>
+                    <i class="fas fa-cloud" style={{ marginRight: "5px" }}></i>
+                    {camera.health.cloud}
+                  </span>
+                  <span>
+                    {" "}
+                    <i class="fas fa-server" style={{ marginRight: "5px" }}></i>
+                    {camera.health.device}
+                  </span>
                 </td>
                 <td>{camera.location}</td>
                 <td>{camera.recorder || "N/A"}</td>
@@ -248,13 +250,11 @@ const CameraTable = () => {
           <i className="fas fa-chevron-left"></i> Previous
         </button>
 
-      
         <span className="page-info">
           Page <strong>{currentPage}</strong> of{" "}
           <strong>{Math.ceil(filteredCameras.length / camerasPerPage)}</strong>
         </span>
 
-  
         <button
           className={`pagination-button ${
             currentPage === Math.ceil(filteredCameras.length / camerasPerPage)
