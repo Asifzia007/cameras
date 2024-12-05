@@ -13,7 +13,7 @@ const CameraTable = () => {
   const [locationFilter, setLocationFilter] = useState("All");
   const [locations, setLocations] = useState([]);
 
-  console.log("camera data" , cameras);
+  console.log("camera data", cameras);
 
   // fetching Cameras data
   useEffect(() => {
@@ -208,12 +208,18 @@ const CameraTable = () => {
                 <td>{camera.name}</td>
                 <td>
                   <span style={{ marginRight: "10px" }}>
-                    <i className="fas fa-cloud" style={{ marginRight: "5px" }}></i>
+                    <i
+                      className="fas fa-cloud"
+                      style={{ marginRight: "5px" }}
+                    ></i>
                     {camera.health.cloud}
                   </span>
                   <span>
                     {" "}
-                    <i className="fas fa-server" style={{ marginRight: "5px" }}></i>
+                    <i
+                      className="fas fa-server"
+                      style={{ marginRight: "5px" }}
+                    ></i>
                     {camera.health.device}
                   </span>
                 </td>
@@ -226,12 +232,22 @@ const CameraTable = () => {
                   </span>
                 </td>
                 <td>
-                  <i
-                    className="fas fa-sync-alt action-button"
-                    onClick={() => updateStatus(camera.id, camera.status)}
-                  ></i>
+                  {camera.status === "Inactive" ? (
+                    <i
+                      className="fas fa-check-circle action-button"
+                      title="Activate Camera"
+                      onClick={() => updateStatus(camera.id, camera.status)}
+                    ></i>
+                  ) : (
+                    <i
+                      className="fas fa-times-circle action-button"
+                      title="Deactivate Camera"
+                      onClick={() => updateStatus(camera.id, camera.status)}
+                    ></i>
+                  )}
                   <i
                     className="fas fa-trash delete-button"
+                    title="Delete Camera"
                     onClick={() => deleteCamera(camera.id)}
                   ></i>
                 </td>
