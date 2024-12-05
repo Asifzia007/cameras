@@ -13,7 +13,7 @@ const CameraTable = () => {
   const [locationFilter, setLocationFilter] = useState("All");
   const [locations, setLocations] = useState([]);
 
-  // console.log("camera data" , cameras);
+  console.log("camera data" , cameras);
 
   // fetching Cameras data
   useEffect(() => {
@@ -60,7 +60,7 @@ const CameraTable = () => {
       const response = await fetch(
         "https://api-app-staging.wobot.ai/app/v1/update/camera/status",
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer 4ApVMIn5sTxeW7GQ5VWeWiy",
@@ -208,12 +208,12 @@ const CameraTable = () => {
                 <td>{camera.name}</td>
                 <td>
                   <span style={{ marginRight: "10px" }}>
-                    <i class="fas fa-cloud" style={{ marginRight: "5px" }}></i>
+                    <i className="fas fa-cloud" style={{ marginRight: "5px" }}></i>
                     {camera.health.cloud}
                   </span>
                   <span>
                     {" "}
-                    <i class="fas fa-server" style={{ marginRight: "5px" }}></i>
+                    <i className="fas fa-server" style={{ marginRight: "5px" }}></i>
                     {camera.health.device}
                   </span>
                 </td>
@@ -228,7 +228,7 @@ const CameraTable = () => {
                 <td>
                   <i
                     className="fas fa-sync-alt action-button"
-                    onClick={() => updateStatus(camera._id, camera.status)}
+                    onClick={() => updateStatus(camera.id, camera.status)}
                   ></i>
                   <i
                     className="fas fa-trash delete-button"
